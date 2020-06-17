@@ -1,0 +1,33 @@
+{
+  "name": "linkmjb-jenkins_dood",
+  "version": "0.1.0",
+  "author": "linkmjb",
+  "summary": "",
+  "license": "Apache-2.0",
+  "source": "",
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib"
+    },
+    {
+      "name": "puppetlabs-docker"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7.0"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.0 < 7.0.0"
+    }
+  ],
+  "pdk-version": "1.18.0",
+  "template-url": "pdk-default#1.18.0",
+  "template-ref": "tags/1.18.0-0-g095317c"
+}

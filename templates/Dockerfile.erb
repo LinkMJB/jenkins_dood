@@ -1,0 +1,35 @@
+FROM jenkins/jenkins:<%= @jenkins_version %>
+
+ARG DOCKER_GID
+
+USER root
+# Setup DooD
+RUN groupadd -g ${DOCKER_GID} docker
+RUN curl -fsSL https://get.docker.com | sh && usermod -aG docker jenkins
+
+USER jenkins
+
+ENV PLUGINS_FORCE_UPGRADE true
+ENV OVERRIDE_MANUAL true
+ENV TRY_UPGRADE_IF_NO_MARKER true
+
+# Stage automatic configuration of the Jenkins Docker plugin (this doesn't work with docker-plugin 1.2.0)
+COPY ./docker-plugin.groovy /usr/share/jenkins/ref/init.groovy.d/docker-plugin.groovy
+COPY ./upgrade_docker_plugin.sh /tmp/upgrade_docker_plugin.sh
+
+# Install defined Jenkins plugins
+<% if @jenkins_plugins != [] -%>
+COPY ./plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+<% end -%>
+
+# Tell Jenkins that setup for this version of Jenkins is completed already
+RUN java -jar /usr/share/jenkins/jenkins.war --version | tee /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state /usr/share/jenkins/ref/jenkins.install.InstallUtil.lastExecVersion
+
+# Startup Jenkins on the defined port, and skip the setup wizard
+ENV JENKINS_OPTS --httpPort=<%= @listen_port_http %> -Djenkins.install.runSetupWizard=false <%= @jenkins_opts %>
+EXPOSE <%= @listen_port_http %>
+
+# Define volume for long-term storage of important configuration files
+VOLUME /var/jenkins_home
+VOLUME /etc/ssl/certs/java
