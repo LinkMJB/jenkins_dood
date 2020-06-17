@@ -16,7 +16,7 @@ This module is a quick bootstrap to get Jenkins deployed in a Docker outside of 
 
 ## Setup
 
-### Setup Requirements **OPTIONAL**
+### Setup Requirements
 
 For this module to work, you will need the following Puppet modules installed:
 * puppetlabs-stdlib

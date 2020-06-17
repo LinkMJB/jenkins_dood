@@ -1,18 +1,27 @@
 #!/bin/bash -x
 
 LISTEN_PORT=<%= @listen_port_http %>
+PLUGIN_DIR=/var/jenkins_home/plugins
 
 (grep "docker-plugin:1.1.9" /var/jenkins_home/plugins.txt > /dev/null) && {
-	sleep 30
-
 	sed -i 's/docker-plugin:1.1.9/docker-plugin:1.2.0/g' /var/jenkins_home/plugins.txt
 
 	export PLUGINS_FORCE_UPGRADE=true
 	export OVERRIDE_MANUAL=true
 	export TRY_UPGRADE_IF_NO_MARKER=true
 	
-	/usr/local/bin/install-plugins.sh docker-plugin:1.2.0
+	# THIS IS BROKEN AFTER INITIAL PLUGINS INSTALLED
+	#/usr/local/bin/install-plugins.sh docker-plugin:1.2.0
+
+	rm /var/jenkins_home/init.groovy.d/docker-plugin.groovy
+
+	rm -rf ${PLUGIN_DIR}/docker-plugin*
+	mkdir ${PLUGIN_DIR}/docker-plugin
+	curl -L -k https://updates.jenkins.io/2.222/latest/docker-plugin.hpi -o ${PLUGIN_DIR}/docker-plugin.hpi
+	(cd ${PLUGIN_DIR}/docker-plugin/ && jar xvf ${PLUGIN_DIR}/docker-plugin.hpi)
 	
 	wget -O /tmp/jenkins-cli.jar http://localhost:${LISTEN_PORT}/jnlpJars/jenkins-cli.jar
 	java -jar /tmp/jenkins-cli.jar -s http://localhost:${LISTEN_PORT}/ safe-restart
 }
+
+rm -f $0

@@ -26,6 +26,14 @@ class jenkins_dood::config inherits jenkins_dood {
     content => template('jenkins_dood/docker-plugin.groovy.erb')
   }
 
+  file { '/opt/jenkins_dood/jenkins_wrapper.sh' :
+    ensure  => 'file',
+    mode    => '0755',
+    owner   => 'root',
+    group   => 'root',
+    content => template('jenkins_dood/jenkins_wrapper.sh.erb')
+  }
+
   file { '/opt/jenkins_dood/upgrade_docker_plugin.sh' :
     ensure  => 'file',
     mode    => '0755',

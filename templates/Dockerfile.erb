@@ -15,7 +15,8 @@ ENV TRY_UPGRADE_IF_NO_MARKER true
 
 # Stage automatic configuration of the Jenkins Docker plugin (this doesn't work with docker-plugin 1.2.0)
 COPY ./docker-plugin.groovy /usr/share/jenkins/ref/init.groovy.d/docker-plugin.groovy
-COPY ./upgrade_docker_plugin.sh /tmp/upgrade_docker_plugin.sh
+COPY ./upgrade_docker_plugin.sh /var/jenkins_home/upgrade_docker_plugin.sh
+COPY ./jenkins_wrapper.sh /usr/local/bin/jenkins_wrapper.sh
 
 # Install defined Jenkins plugins
 <% if @jenkins_plugins != [] -%>
@@ -33,3 +34,5 @@ EXPOSE <%= @listen_port_http %>
 # Define volume for long-term storage of important configuration files
 VOLUME /var/jenkins_home
 VOLUME /etc/ssl/certs/java
+
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins_wrapper.sh"]

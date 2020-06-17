@@ -24,13 +24,4 @@ class jenkins_dood::service inherits jenkins_dood {
     subscribe => File['/opt/jenkins_dood/Dockerfile'],
     env       => ['PLUGINS_FORCE_UPGRADE=true', 'OVERRIDE_MANUAL=true', 'TRY_UPGRADE_IF_NO_MARKER=true'],
   }
-
-  if ! ($jenkins_plugins in [ '1.1.9']) {
-    docker::exec { 'upgrade_jenkins_docker_plugin':
-      container => 'run_jenkins_dood',
-      command   => '/tmp/upgrade_docker_plugin.sh',
-      tty       => true,
-      unless    => '[ ! -f /tmp/upgrade_docker_plugin.sh ]',
-    }
-  }
 }

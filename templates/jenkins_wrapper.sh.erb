@@ -1,0 +1,8 @@
+#!/bin/bash -x
+
+/sbin/tini -s /usr/local/bin/jenkins.sh &
+sleep 30
+[ -f /var/jenkins_home/upgrade_docker_plugin.sh ] && /var/jenkins_home/upgrade_docker_plugin.sh
+while true; do
+	sleep 300
+done

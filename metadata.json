@@ -2,15 +2,17 @@
   "name": "linkmjb-jenkins_dood",
   "version": "0.1.0",
   "author": "linkmjb",
-  "summary": "",
+  "summary": "Puppet module for installing and managing a Jenkins DooD deployment",
   "license": "Apache-2.0",
-  "source": "",
+  "source": "https://github.com/LinkMJB/jenkins_dood",
   "dependencies": [
     {
-      "name": "puppetlabs-stdlib"
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 6.3.0"
     },
     {
-      "name": "puppetlabs-docker"
+      "name": "puppetlabs-docker",
+      "version_requirement": ">= 3.10.1"
     }
   ],
   "operatingsystem_support": [
